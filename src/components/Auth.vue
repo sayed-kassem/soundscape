@@ -89,7 +89,12 @@
             </button>
           </form>
           <!-- Registration Form -->
-          <vee-form v-show="tab === 'register'" :validation-schema="schema">
+          <vee-form
+            v-show="tab === 'register'"
+            :validation-schema="schema"
+            @submit="register"
+            :initial-values="userData"
+          >
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
@@ -126,12 +131,20 @@
             <div class="mb-3">
               <label class="inline-block mb-2">Password</label>
               <vee-field
-                type="password"
                 name="password"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Password"
-              />
-              <ErrorMessage class="text-red-500" name="password" />
+                :bails="false"
+                v-slot="{ field, errors }"
+              >
+                <input
+                  class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+                  placeholder="Password"
+                  type="password"
+                  v-bind="field"
+                />
+                <div class="text-red-600" v-for="error in errors" :key="error">
+                  {{ error }}
+                </div>
+              </vee-field>
             </div>
             <!-- Confirm Password -->
             <div class="mb-3">
@@ -147,21 +160,28 @@
             <!-- Country -->
             <div class="mb-3">
               <label class="inline-block mb-2">Country</label>
-              <select
+              <vee-field
+                as="select"
+                name="country"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
               >
                 <option value="USA">USA</option>
                 <option value="Mexico">Mexico</option>
                 <option value="Germany">Germany</option>
-              </select>
+                <option value="Israel">Israel</option>
+              </vee-field>
+              <ErrorMessage class="text-red-500" name="country" />
             </div>
             <!-- TOS -->
             <div class="mb-3 pl-6">
-              <input
+              <vee-field
+                name="tos"
+                value="1"
                 type="checkbox"
                 class="w-4 h-4 float-left -ml-6 mt-1 rounded"
               />
               <label class="inline-block">Accept terms of service</label>
+              <ErrorMessage class="text-red-500" name="tos" />
             </div>
             <button
               type="submit"
@@ -188,10 +208,13 @@ export default {
         name: "required|min:3|max:100|alpha_spaces",
         email: "required|email|min:3|max:100",
         age: "required|min_value:16|max_value:100",
-        password: "required|min:6|max:100",
+        password: "required|min:9|max:100|excluded:password,pass123",
         confirm_password: "confirmed:@password",
-        country: "",
-        tos: "",
+        country: "required|excluded:Israel",
+        tos: "required",
+      },
+      userData: {
+        country: "USA",
       },
     };
   },
@@ -200,6 +223,11 @@ export default {
     ...mapWritableState(useModalStore, {
       modalVisibility: "isOpen",
     }),
+  },
+  methods: {
+    register(values) {
+      console.log(values);
+    },
   },
   components: { ErrorMessage },
 };
