@@ -168,6 +168,7 @@
                 <option value="USA">USA</option>
                 <option value="Mexico">Mexico</option>
                 <option value="Germany">Germany</option>
+                <option value="Other">Other</option>
                 <option value="Israel">Israel</option>
               </vee-field>
               <ErrorMessage class="text-red-500" name="country" />
@@ -181,6 +182,7 @@
                 class="w-4 h-4 float-left -ml-6 mt-1 rounded"
               />
               <label class="inline-block">Accept terms of service</label>
+              <br />
               <ErrorMessage class="text-red-500" name="tos" />
             </div>
             <button
@@ -209,9 +211,9 @@ export default {
         email: "required|email|min:3|max:100",
         age: "required|min_value:16|max_value:100",
         password: "required|min:9|max:100|excluded:password,pass123",
-        confirm_password: "confirmed:@password",
-        country: "required|excluded:Israel",
-        tos: "required",
+        confirm_password: "passwords_mismatch:@password",
+        country: "required|country_excluded:Israel",
+        tos: "tos",
       },
       userData: {
         country: "USA",
