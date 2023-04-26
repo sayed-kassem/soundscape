@@ -9,6 +9,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "firebase/app": "firebase/app",
+      "firebase/auth": "firebase/auth",
+      "firebase/firestore": "firebase/firestore",
+      "firebase/storage": "firebase/storage",
     },
   },
 });

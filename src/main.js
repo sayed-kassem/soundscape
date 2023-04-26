@@ -6,6 +6,9 @@ import router from "./router";
 
 import "./assets/base.css";
 import "./assets/main-copy.css";
+
+import "./includes/firebase";
+
 import VeeValidatePlugin from "./includes/validation";
 const app = createApp(App);
 
