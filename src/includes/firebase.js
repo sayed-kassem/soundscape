@@ -1,6 +1,6 @@
-import {initializeApp} from "firebase/app";
+import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import {getFirestore, collection} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
     apiKey: "AIzaSyC-auU6L0iDL9vZjhUmWy0U01ZUGGUIKcU",
     authDomain: "spotify-clone-fcf6d.firebaseapp.com",
@@ -12,10 +12,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const usersCollection = collection(db, "users");
 
-export {
-    auth,
-    db,
-    usersCollection
-}
+export { auth, db };
