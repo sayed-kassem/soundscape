@@ -7,13 +7,21 @@ import router from "./router";
 import "./assets/base.css";
 import "./assets/main-copy.css";
 
-import "./includes/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/includes/firebase";
 
 import VeeValidatePlugin from "./includes/validation";
-const app = createApp(App);
 
-app.use(createPinia());
-app.use(router);
-app.use(VeeValidatePlugin);
+let app;
+onAuthStateChanged(auth, () => {
+    if (!app) {
+        app = createApp(App);
 
-app.mount("#app");
+        app.use(createPinia());
+        app.use(router);
+        app.use(VeeValidatePlugin);
+
+        app.mount("#app");
+    }
+
+});
