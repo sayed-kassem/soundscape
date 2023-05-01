@@ -19,10 +19,10 @@
           </li>
           <template v-else>
             <li>
-              <router-link :to="{name: 'manage'}" class="px-2 text-white" >Manage</router-link>
+              <router-link  class="px-2 text-white" :to="{ name: 'manage' }">Manage</router-link>
             </li>
             <li>
-              <a class="px-2 text-white" href="#" @click.prevent="userStore.signOutUser">Logout</a>
+              <a class="px-2 text-white" href="#" @click.prevent="signOut">Logout</a>
             </li>
           </template>
         </ul>
@@ -44,6 +44,12 @@ export default {
             this.modalStore.isOpen = !this.modalStore.isOpen;
             console.log(this.modalStore.isOpen);
         },
+        signOut(){
+          this.userStore.signOutUser();
+          if(this.$route.name === "manage"){
+            this.$router.push({name:"home"});
+          }
+        }
     },
 };
 </script>
