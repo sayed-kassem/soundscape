@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage"
 const firebaseConfig = {
     apiKey: "AIzaSyC-auU6L0iDL9vZjhUmWy0U01ZUGGUIKcU",
     authDomain: "spotify-clone-fcf6d.firebaseapp.com",
@@ -12,5 +13,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
-export { auth, db };
+export { auth, db, storage };
