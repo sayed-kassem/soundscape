@@ -113,6 +113,11 @@ export default {
       })
 
     },
+    // cancelUploads(){
+    //   this.uploads.forEach((upload)=>{
+    //       upload.uploadTask.cancel();
+    //   })
+    // }
   },
 };
 </script>
