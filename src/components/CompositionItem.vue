@@ -4,6 +4,7 @@
       <h4 class="inline-block text-sm">{{ song.modified_name }}</h4>
       <button
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
+        @click.prevent="deleteSong"
       >
         <i class="fa fa-times"></i>
       </button>
@@ -34,6 +35,7 @@
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
+            @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="modified_name" />
         </div>
@@ -44,6 +46,7 @@
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Genre"
+            @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="genre" />
         </div>
@@ -68,8 +71,9 @@
 </template>
 <script>
 import { ErrorMessage } from "vee-validate";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/includes/firebase";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { db, storage } from "@/includes/firebase";
+import { ref, deleteObject } from "firebase/storage";
 export default {
   name: "CompositionItem",
   props: {
@@ -84,6 +88,13 @@ export default {
     index:{
       type:Number,
       required:true
+    },
+    removeSong:{
+      type: Function,
+      required:true
+    },
+    updateUnsavedFlag:{
+      type:Function,
     }
   },
   data() {
@@ -119,7 +130,18 @@ export default {
       this.in_submssion = false;
       this.alert_variant = 'bg-green-500';
       this.alert_message = "Success!";
+      this.updateUnsavedFlag(false);
     },
+    async deleteSong(){
+      const songsRef = ref(storage, `songs/${this.song.original_name}`);
+      try{
+        await deleteObject(songsRef);
+      }catch(error){
+        console.log("Unexpected error");
+      }
+      await deleteDoc(doc(db,"songs", this.song.docID));
+      this.removeSong(this.index);
+    }
   },
 };
 </script>

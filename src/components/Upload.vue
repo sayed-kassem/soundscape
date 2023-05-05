@@ -19,7 +19,7 @@
       >
         <h5>Drop your files here</h5>
       </div>
-      <input type="file" multiple @change="upload($event)"/>
+      <input type="file" multiple @change="upload($event)" />
       <hr class="my-6" />
       <!-- Progess Bars -->
       <div class="mb-4" v-for="upload in uploads" :key="upload.name">
@@ -42,7 +42,7 @@
 </template>
 <script>
 import { storage, auth, db } from "@/includes/firebase";
-import {addDoc, collection} from "firebase/firestore"
+import { addDoc, collection, getDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 export default {
   name: "Upload",
@@ -52,10 +52,13 @@ export default {
       uploads: [],
     };
   },
+  props: ["addSong"],
   methods: {
     upload($event) {
       this.is_dragover = false;
-      const files = $event.dataTransfer ? [...$event.dataTransfer.files] : [...$event.target.files];
+      const files = $event.dataTransfer
+        ? [...$event.dataTransfer.files]
+        : [...$event.target.files];
       files.forEach(async (file) => {
         if (file.type !== "audio/mpeg") {
           return;
@@ -83,9 +86,9 @@ export default {
             this.uploads[uploadIndex].current_progress = progress;
           },
           (error) => {
-            this.uploads[uploadIndex].variant ='bg-red-400';
-            this.uploads[uploadIndex].icon ='fas fa-times';
-            this.uploads[uploadIndex].text_class='text-red-400';
+            this.uploads[uploadIndex].variant = "bg-red-400";
+            this.uploads[uploadIndex].icon = "fas fa-times";
+            this.uploads[uploadIndex].text_class = "text-red-400";
             console.log(error);
           },
           async () => {
@@ -94,24 +97,24 @@ export default {
               display_name: auth.currentUser.displayName,
               original_name: uploadTask.snapshot.ref.name,
               modified_name: uploadTask.snapshot.ref.name,
-              genre:'',
-              comments_count:0,
-            }
+              genre: "",
+              comments_count: 0,
+            };
             song.url = await getDownloadURL(songsRef);
-            await addDoc(collection(db,"songs"), song)
-
-            this.uploads[uploadIndex].variant ='bg-green-400';
-            this.uploads[uploadIndex].icon ='fas fa-check';
-            this.uploads[uploadIndex].text_class='text-green-400';
+            const songRef = await addDoc(collection(db, "songs"), song);
+            const songSnapshot = await getDoc(songRef);
+            this.addSong(songSnapshot);
+            this.uploads[uploadIndex].variant = "bg-green-400";
+            this.uploads[uploadIndex].icon = "fas fa-check";
+            this.uploads[uploadIndex].text_class = "text-green-400";
           }
         );
       });
     },
     beforeUnmount() {
-      this.uploads.forEach((upload)=>{
-          upload.uploadTask.cancel();
-      })
-
+      this.uploads.forEach((upload) => {
+        upload.uploadTask.cancel();
+      });
     },
     // cancelUploads(){
     //   this.uploads.forEach((upload)=>{
