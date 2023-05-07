@@ -41,13 +41,15 @@
 </template>
 <script>
 import { db } from "@/includes/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import {getDocs, getDoc, limit, startAfter, orderBy, collection } from "firebase/firestore";
 import AppSongItem from "@/components/SongItem.vue";
 export default {
   name: "Home",
   data() {
     return {
       songs: [],
+      maxPerPage: 25,
+      pendingRequest: false,
     };
   },
   components:{
@@ -65,7 +67,18 @@ export default {
   
   methods:{
     async getSongs(){
-      const snapshots = await getDocs(collection(db, "songs"));
+      if(this.pendingRequest){
+        return;
+      }
+      this.pendingRequest = true;
+      let snapshots;
+      if(this.songs.length){
+      const lastDoc = await getDoc(collection(db,"songs"), this.songs[this.songs.length-1].docID);
+       snapshots = await getDocs(collection(db, "songs"), limit(this.maxPerPage), startAfter(lastDoc), orderBy('modified_name'));
+      }
+      else{
+      snapshots = await getDocs(collection(db, "songs"), limit(this.maxPerPage), orderBy('modified_name'));
+      }
     snapshots.forEach((doc) => {
       const song = {
         ...doc.data(),
@@ -73,6 +86,7 @@ export default {
       };
       this.songs.push(song);
     });
+    this.pendingRequest = false;
     },
     handleScroll(){
         const {scrollTop, offsetHeight} = document.documentElement;
@@ -80,7 +94,7 @@ export default {
         const bottomOfWindow = Math.round(scrollTop) + innerHeight === offsetHeight;
 
         if(bottomOfWindow){
-          console.log('Bottom of Window');
+          this.getSongs();
         }
     }
   }
