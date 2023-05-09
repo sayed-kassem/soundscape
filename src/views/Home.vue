@@ -41,7 +41,7 @@
 </template>
 <script>
 import { db } from "@/includes/firebase";
-import {getDocs, getDoc, limit, startAfter, orderBy, collection } from "firebase/firestore";
+import {getDocs, getDoc, limit, startAfter, orderBy, collection, doc } from "firebase/firestore";
 import AppSongItem from "@/components/SongItem.vue";
 export default {
   name: "Home",
@@ -73,7 +73,7 @@ export default {
       this.pendingRequest = true;
       let snapshots;
       if(this.songs.length){
-      const lastDoc = await getDoc(collection(db,"songs"), this.songs[this.songs.length-1].docID);
+      const lastDoc = await getDoc(doc(db,"songs"), this.songs[this.songs.length-1].docID);
        snapshots = await getDocs(collection(db, "songs"), limit(this.maxPerPage), startAfter(lastDoc), orderBy('modified_name'));
       }
       else{

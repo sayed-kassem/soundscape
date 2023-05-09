@@ -10,6 +10,7 @@
       <button
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+        @click.prevent="newSong(song)"
       >
         <i class="fas fa-play"></i>
       </button>
@@ -25,7 +26,7 @@
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <!-- Comment Count -->
-        <span class="card-title">Comments (15)</span>
+        <span class="card-title">Comments ({{song.comments_count}})</span>
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
@@ -79,10 +80,11 @@
   </ul>
 </template>
 <script>
-import { doc, getDoc, addDoc, collection, where, getDocs } from "firebase/firestore";
+import { doc, getDoc, addDoc, collection, where, getDocs, updateDoc } from "firebase/firestore";
 import { db, auth } from "@/includes/firebase";
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import useUserStore from "@/stores/user";
+import usePlayerStore from '@/stores/player';
 export default {
   name: "Song",
   data() {
@@ -114,6 +116,7 @@ export default {
     this.getComments();
   },
   methods: {
+    ...mapActions(usePlayerStore,["newSong"]),
     async addComment(values, context) {
       this.comment_in_submission = true;
       this.comment_show_alert = true;
@@ -127,6 +130,12 @@ export default {
         uid: auth.currentUser.uid,
       };
       await addDoc(collection(db, "comments"), comment);
+
+      this.song.comments_count += 1;
+
+      await updateDoc(doc(db,"songs", this.$route.params.id ),{
+        comments_count: this.song.comments_count,
+      })
 
       this.getComments();
 
