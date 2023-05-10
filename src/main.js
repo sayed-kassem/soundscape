@@ -10,6 +10,8 @@ import "./assets/main-copy.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/includes/firebase";
 
+import Icon from "./directives/icon";
+import i18n from "./includes/i18n";
 import VeeValidatePlugin from "./includes/validation";
 
 let app;
@@ -20,7 +22,8 @@ onAuthStateChanged(auth, () => {
         app.use(createPinia());
         app.use(router);
         app.use(VeeValidatePlugin);
-
+        app.use(i18n);
+        app.directive("icon", Icon);
         app.mount("#app");
     }
 
