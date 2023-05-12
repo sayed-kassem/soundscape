@@ -19,6 +19,7 @@
         <!-- Song Info -->
         <div class="text-3xl font-bold">{{ song.modified_name }}</div>
         <div>{{ song.genre }}</div>
+        <!-- <div class="song-price">{{ $n(1, "currency", "ja") }}</div> -->
       </div>
     </div>
   </section>
@@ -27,7 +28,7 @@
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <!-- Comment Count -->
-        <span class="card-title">Comments ({{song.comments_count}})</span>
+        <span class="card-title">Comments ({{$tc("song.comment_count", song.comment_count, {count: song.comments_count })}})</span>
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
@@ -82,7 +83,7 @@
 </main>
 </template>
 <script>
-import { doc, getDoc, addDoc, collection, where, getDocs, updateDoc } from "firebase/firestore";
+import { doc, getDoc, addDoc, collection, where, getDocs, updateDoc, query } from "firebase/firestore";
 import { db, auth } from "@/includes/firebase";
 import { mapState, mapActions } from "pinia";
 import useUserStore from "@/stores/user";
@@ -148,7 +149,8 @@ export default {
       context.resetForm();
     },
     async getComments(){
-      const snapshots = await getDocs(collection(db,"comments"), where("sid","==",this.$route.params.id));
+      console.log(this.$route.params.id);
+      const snapshots = await getDocs(query(collection(db,"comments"), where("songId","==",this.$route.params.id)));
       this.comments = [];
       snapshots.forEach((doc)=>{
         this.comments.push({
