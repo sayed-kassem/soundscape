@@ -12,8 +12,10 @@ import { auth } from "@/includes/firebase";
 
 import Icon from "./directives/icon";
 import i18n from "./includes/i18n";
+import { registerSW } from "virtual:pwa-register"
 import VeeValidatePlugin from "./includes/validation";
 
+registerSW({ immediate: true }); // register a service worker.
 let app;
 onAuthStateChanged(auth, () => {
     if (!app) {
