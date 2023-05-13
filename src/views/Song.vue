@@ -1,93 +1,118 @@
 <template>
   <!-- Music Header -->
   <main>
-  <section class="w-full mb-8 py-14 text-center text-white relative">
-    <div
-      class="absolute inset-0 w-full h-full box-border bg-contain music-bg"
-      style="background-image: url(/assets/img/song-header.png)"
-    ></div>
-    <div class="container mx-auto flex items-center">
-      <!-- Play/Pause Button -->
-      <button
-        type="button"
-        class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
-        @click.prevent="newSong(song)"
-      >
-        <i class="fas fa-play"></i>
-      </button>
-      <div class="z-50 text-left ml-8">
-        <!-- Song Info -->
-        <div class="text-3xl font-bold">{{ song.modified_name }}</div>
-        <div>{{ song.genre }}</div>
-        <!-- <div class="song-price">{{ $n(1, "currency", "ja") }}</div> -->
-      </div>
-    </div>
-  </section>
-  <!-- Form -->
-  <section class="container mx-auto mt-6" id="comments">
-    <div class="bg-white rounded border border-gray-200 relative flex flex-col">
-      <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
-        <!-- Comment Count -->
-        <span class="card-title">Comments ({{$tc("song.comment_count", song.comment_count, {count: song.comments_count })}})</span>
-        <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
-      </div>
-      <div class="p-6">
-        <vee-form :validation-schema="schema" @submit="addComment" v-if="userLoggedIn">
-          <div
-            class="text-white text-center p-4 mb-4 font-bold"
-            v-if="comment_show_alert"
-            :class="comment_alert_variant"
-          >
-            {{ comment_alert_msg }}
-          </div>
-          <vee-field
-            as="textarea"
-            name="comment"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
-            placeholder="Your comment here..."
-          />
-          <ErrorMessage class="text-red-600" name="comment" />
-          <button
-            type="submit"
-            class="py-1.5 px-3 rounded text-white bg-green-600 block"
-            :disabled="comment_in_submission"
-          >
-            Submit
-          </button>
-        </vee-form>
-        <!-- Sort Comments -->
-        <select
-          class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-          v-model="sort"
+    <section class="w-full mb-8 py-14 text-center text-white relative">
+      <div
+        class="absolute inset-0 w-full h-full box-border bg-contain music-bg"
+        style="background-image: url(/assets/img/song-header.png)"
+      ></div>
+      <div class="container mx-auto flex items-center">
+        <!-- Play/Pause Button -->
+        <button
+          type="button"
+          class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+          @click.prevent="newSong(song)"
         >
-          <option value="1">Latest</option>
-          <option value="2">Oldest</option>
-        </select>
+          <i class="fas fa-play"></i>
+        </button>
+        <div class="z-50 text-left ml-8">
+          <!-- Song Info -->
+          <div class="text-3xl font-bold">{{ song.modified_name }}</div>
+          <div>{{ song.genre }}</div>
+          <!-- <div class="song-price">{{ $n(1, "currency", "ja") }}</div> -->
+        </div>
       </div>
-    </div>
-  </section>
-  <!-- Comments -->
-  <ul class="container mx-auto">
-    <li class="p-6 bg-gray-50 border border-gray-200" v-for="comment in sortedComments" :key="comment.docID">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">{{comment.name}}</div>
-        <time>{{comment.datePosted}}</time>
+    </section>
+    <!-- Form -->
+    <section class="container mx-auto mt-6" id="comments">
+      <div
+        class="bg-white rounded border border-gray-200 relative flex flex-col"
+      >
+        <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
+          <!-- Comment Count -->
+          <span class="card-title"
+            >Comments ({{
+              $tc("song.comment_count", song.comment_count, {
+                count: song.comments_count,
+              })
+            }})</span
+          >
+          <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
+        </div>
+        <div class="p-6">
+          <vee-form
+            :validation-schema="schema"
+            @submit="addComment"
+            v-if="userLoggedIn"
+          >
+            <div
+              class="text-white text-center p-4 mb-4 font-bold"
+              v-if="comment_show_alert"
+              :class="comment_alert_variant"
+            >
+              {{ comment_alert_msg }}
+            </div>
+            <vee-field
+              as="textarea"
+              name="comment"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
+              placeholder="Your comment here..."
+            />
+            <ErrorMessage class="text-red-600" name="comment" />
+            <button
+              type="submit"
+              class="py-1.5 px-3 rounded text-white bg-green-600 block"
+              :disabled="comment_in_submission"
+            >
+              Submit
+            </button>
+          </vee-form>
+          <!-- Sort Comments -->
+          <select
+            class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            v-model="sort"
+          >
+            <option value="1">Latest</option>
+            <option value="2">Oldest</option>
+          </select>
+        </div>
       </div>
+    </section>
+    <!-- Comments -->
+    <ul class="container mx-auto">
+      <li
+        class="p-6 bg-gray-50 border border-gray-200"
+        v-for="comment in sortedComments"
+        :key="comment.docID"
+      >
+        <!-- Comment Author -->
+        <div class="mb-5">
+          <div class="font-bold">{{ comment.name }}</div>
+          <time>{{ comment.datePosted }}</time>
+        </div>
 
-      <p>
-        {{comment.content}}
-      </p>
-    </li>
-  </ul>
-</main>
+        <p>
+          {{ comment.content }}
+        </p>
+      </li>
+    </ul>
+  </main>
 </template>
 <script>
-import { doc, getDoc, addDoc, collection, where, getDocs, updateDoc, query } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  addDoc,
+  collection,
+  where,
+  getDocs,
+  updateDoc,
+  query,
+} from "firebase/firestore";
 import { db, auth } from "@/includes/firebase";
 import { mapState, mapActions } from "pinia";
 import useUserStore from "@/stores/user";
-import usePlayerStore from '@/stores/player';
+import usePlayerStore from "@/stores/player";
 export default {
   name: "Song",
   data() {
@@ -104,22 +129,25 @@ export default {
       comment_alert_msg: "Please wait, your comment is being submitted..",
     };
   },
-  async created() {
-    const docSnapshot = await getDoc(doc(db, "songs", this.$route.params.id));
+  async beforeRouteEnter(to, from, next) {
+    const docSnapshot = await getDoc(doc(db, "songs", to.params.id));
 
-    if (!docSnapshot.exists()) {
-      this.$router.push({ name: "home" });
-      return;
-    }
-    const {sort} = this.$route.query;
+    next((vm) => {
+      //vm is context for the component, acts like this keyword
+      if (!docSnapshot.exists()) {
+        vm.$router.push({ name: "home" });
+        return;
+      }
+      const { sort } = vm.$route.query;
 
-    this.sort = sort === '1' || sort === '2' ? sort :'1';
+      vm.sort = sort === "1" || sort === "2" ? sort : "1";
 
-    this.song = docSnapshot.data();
-    this.getComments();
+      vm.song = docSnapshot.data();
+      vm.getComments();
+    });
   },
   methods: {
-    ...mapActions(usePlayerStore,["newSong"]),
+    ...mapActions(usePlayerStore, ["newSong"]),
     async addComment(values, context) {
       this.comment_in_submission = true;
       this.comment_show_alert = true;
@@ -136,9 +164,9 @@ export default {
 
       this.song.comments_count += 1;
 
-      await updateDoc(doc(db,"songs", this.$route.params.id ),{
+      await updateDoc(doc(db, "songs", this.$route.params.id), {
         comments_count: this.song.comments_count,
-      })
+      });
 
       this.getComments();
 
@@ -148,41 +176,45 @@ export default {
 
       context.resetForm();
     },
-    async getComments(){
+    async getComments() {
       console.log(this.$route.params.id);
-      const snapshots = await getDocs(query(collection(db,"comments"), where("songId","==",this.$route.params.id)));
+      const snapshots = await getDocs(
+        query(
+          collection(db, "comments"),
+          where("songId", "==", this.$route.params.id)
+        )
+      );
       this.comments = [];
-      snapshots.forEach((doc)=>{
+      snapshots.forEach((doc) => {
         this.comments.push({
           docId: doc.id,
-          ...doc.data()
-        })
-      })
+          ...doc.data(),
+        });
+      });
     },
   },
   computed: {
     ...mapState(useUserStore, ["userLoggedIn"]),
-    sortedComments(){
-      return this.comments.slice().sort((a,b)=>{
-          if (this.sort === '1') {
-            return new Date(b.datePosted) - new Date(a.datePosted);
-          }
-          return new Date(a.datePosted) - new Date(b.datePosted); //oldest to latest
-
+    sortedComments() {
+      return this.comments.slice().sort((a, b) => {
+        if (this.sort === "1") {
+          return new Date(b.datePosted) - new Date(a.datePosted);
+        }
+        return new Date(a.datePosted) - new Date(b.datePosted); //oldest to latest
       }); //slice beofre sort to avoid changing data, slice returns a new array, by creating a copy of original arr.
-    }
+    },
   },
-  watch:{
-    sort(newVal){
-      if(newVal === this.$route.query.sort){
+  watch: {
+    sort(newVal) {
+      if (newVal === this.$route.query.sort) {
         return;
       }
       this.$router.push({
-        query:{
+        query: {
           sort: newVal,
-        }
-      })
-    }
-  }
+        },
+      });
+    },
+  },
 };
 </script>

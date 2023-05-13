@@ -63,6 +63,17 @@ export default {
         if (file.type !== "audio/mpeg") {
           return;
         }
+        if(!navigator.onLine){
+          this.uploads.push({
+            uploadTask:{},
+            current_progress: 100,
+            name: file.name,
+            variant: "bg-red-400",
+            icon: 'fas fa-times',
+            text_class: 'text-red-400',
+          })
+          return;
+        }
         //const storageRef = ref(storage); // same bucket url in config object of firebase
         const songsRef = ref(storage, `songs/${file.name}`);
         const metadata = {

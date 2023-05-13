@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage"
 const firebaseConfig = {
     apiKey: "AIzaSyC-auU6L0iDL9vZjhUmWy0U01ZUGGUIKcU",
@@ -15,5 +15,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const storage = getStorage(app);
+enableIndexedDbPersistence(db).catch((error) => {
+    console.log(`Firebase error: ${error.code}`)
+})
 
 export { auth, db, storage };
