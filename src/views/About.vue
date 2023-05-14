@@ -5,7 +5,7 @@
         style="background-image: url(assets/img/about-bg.gif);"
       ></div> -->    
       <div class="absolute inset-0 sm:w-full sm:h-full introduction-bg">
-        <video class="absolute inset-0 w-full h-full object-fill" src="assets/img/1.mp4" autoplay muted loop playsinline></video>
+        <video class="absolute inset-0 w-full h-full object-fill" src="/public/assets/img/1.mp4" autoplay muted loop playsinline></video>
       </div>
 
       <div class="container mx-auto mt-48">
