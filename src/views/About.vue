@@ -13,7 +13,7 @@
         <p class="w-full md:w-8/12 mx-auto text-xl text-white">
           🎵 Introducing SoundScape: Unleash Your Music Experience! 🚀 
           an immersive and seamless music experience. 
-          Explore a world of captivating melodies, effortlessly manage your playlists, and enjoy intuitive navigation—all in one sleek package. 
+          Explore a world of captivating melodies, effortlessly manage your queue, and enjoy intuitive navigation—all in one sleek package. 
           Unleash the rhythm within and elevate your music journey with SoundScape. 🎧🎶
         </p>
       </div>
