@@ -11,9 +11,9 @@
         <button
           type="button"
           class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
-          @click.prevent="newSong(song)"
+          @click.prevent="current_song === song ? toggleAudio : newSong(song)"
         >
-          <i class="fas fa-play"></i>
+          <i  @click.prevent="toggleAudio" :class="{'fas fa-play': !playing, 'fas fa-pause': playing && current_song===song}"></i>
         </button>
         <div class="z-50 text-left ml-8">
           <!-- Song Info -->
@@ -147,7 +147,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions(usePlayerStore, ["newSong"]),
+    ...mapActions(usePlayerStore, ["newSong", "toggleAudio"]),
     async addComment(values, context) {
       this.comment_in_submission = true;
       this.comment_show_alert = true;
@@ -195,6 +195,7 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ["userLoggedIn"]),
+    ...mapState(usePlayerStore, ["current_song", "playing"]),
     sortedComments() {
       return this.comments.slice().sort((a, b) => {
         if (this.sort === "1") {

@@ -23,7 +23,6 @@
         src="/assets/img/introduction-music.png"
       />
     </section>
-
     <!-- Main Content -->
     <section class="container mx-auto">
       <div
