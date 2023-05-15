@@ -13,7 +13,7 @@
           class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
           @click.prevent="current_song === song ? toggleAudio : newSong(song)"
         >
-          <i  @click.prevent="toggleAudio" :class="{'fas fa-play': !playing, 'fas fa-pause': playing && current_song===song}"></i>
+          <i  @click.prevent="toggleAudio" :class="{'fas fa-play': !playing || current_song !== song, 'fas fa-pause': playing && current_song===song}"></i>
         </button>
         <div class="z-50 text-left ml-8">
           <!-- Song Info -->
