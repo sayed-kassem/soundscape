@@ -3,8 +3,14 @@
   <div class="fixed bottom-0 left-0 bg-white px-4 py-2 w-full">
     <!-- Track Info -->
     <div class="text-center" v-if="current_song.modified_name">
+      <!-- <button type="button">
+        <i class="fa fa-caret-left text-gray-500 text-xl mr-4 "></i>
+      </button> -->
       <span class="song-title font-bold">{{current_song.modified_name}}</span> by
       <span class="song-artist">{{current_song.display_name}}</span>
+      <!-- <button type="button">
+        <i class="fa fa-caret-right text-gray-500 text-xl ml-4 "></i>
+      </button> -->
     </div>
     <div class="flex flex-nowrap gap-4 items-center">
       <!-- Play/Pause Button -->

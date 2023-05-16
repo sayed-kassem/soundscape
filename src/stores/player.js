@@ -8,6 +8,7 @@ export default defineStore("player", {
         seek: "00:00", //current position of audio
         duration: "00:00",
         playerProgress: "0%",
+        //playlist: [],
     }),
     actions: {
         async newSong(song) {
@@ -59,7 +60,24 @@ export default defineStore("player", {
             this.sound.seek(seconds);
             this.sound.once("seek", this.progress);
 
-        }
+        },
+        // addToPlaylist(song) {
+        //     if (this.current_song == song) {
+        //         return;
+        //     }
+        //     this.playlist.push(song);
+        //     // if (!this.current_song && !(this.sound instanceof Howl)) {
+        //     //     const playlist_urls = []
+        //     //     this.playlist.forEach(s => {
+        //     //         playlist_urls.push(s.url);
+        //     //     })
+        //     //     this.sound = new Howl({
+        //     //         src: playlist_urls,
+        //     //         html5: true,
+        //     //     })
+        //     //     this.sound.play();
+        //     // }
+        // }
     },
     getters: {
         playing: (state) => {

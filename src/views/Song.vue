@@ -3,10 +3,18 @@
   <main>
     <section class="w-full mb-8 py-14 text-center text-white relative">
       <div
-        class="absolute inset-0 w-full h-full box-border bg-contain music-bg"
+        class="absolute inset-0 w-full h-full box-border bg-contain music-bg flex flex-row"
         style="background-image: url(/assets/img/song-header.png)"
       ></div>
       <div class="container mx-auto flex items-center">
+        <!-- Go back button -->
+        <button
+          type="button"
+          class="z-50 h-10 w-10 text-xl bg-white text-black rounded-full focus:outline-none mr-8"
+          @click.prevent="$router.go(-2)"
+        >
+          <i  class="fas fa-arrow-left"></i>
+        </button>
         <!-- Play/Pause Button -->
         <button
           type="button"
@@ -21,6 +29,12 @@
           <div>{{ song.genre }}</div>
           <!-- <div class="song-price">{{ $n(1, "currency", "ja") }}</div> -->
         </div>
+        <!-- <div class="z-50 ml-auto">
+          <button type="button"
+          @click.prevent="addToQueue">
+            <i class="fa text-xl transition-all duration-500 ease-in-out" :class="{' fa-plus text-white-500' :!queued, ' fa-check text-green-500':queued}"></i>
+          </button>
+        </div> -->
       </div>
     </section>
     <!-- Form -->
@@ -123,6 +137,7 @@ export default {
       schema: {
         comment: "required|min:3",
       },
+      //queued: false,
       comment_in_submission: false,
       comment_show_alert: false,
       comment_alert_variant: "bg-blue-500",
@@ -147,7 +162,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions(usePlayerStore, ["newSong", "toggleAudio"]),
+    ...mapActions(usePlayerStore, ["newSong", "toggleAudio","addToPlaylist"]),
     async addComment(values, context) {
       this.comment_in_submission = true;
       this.comment_show_alert = true;
@@ -192,6 +207,13 @@ export default {
         });
       });
     },
+    // addToQueue(){
+    //   if(this.queued){
+    //     return;
+    //   }
+    //   this.queued = !this.queued;
+    //   this.addToPlaylist(this.song)
+    // }
   },
   computed: {
     ...mapState(useUserStore, ["userLoggedIn"]),
