@@ -10,7 +10,7 @@
         <!-- Go back button -->
         <button
           type="button"
-          class="z-50 h-10 w-10 text-xl bg-white text-black rounded-full focus:outline-none mr-8"
+          class="z-50 h-4 w-8 text-xs ml-4 sm:h-10 sm:w-10 md:h-15 md:h-15 sm:text-xl md:text-2xl lg:text-3xl md:bg-white text-white md:text-black md:rounded-full focus:outline-none mr-8"
           @click.prevent="$router.go(-2)"
         >
           <i  class="fas fa-arrow-left"></i>
@@ -18,7 +18,7 @@
         <!-- Play/Pause Button -->
         <button
           type="button"
-          class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+          class="z-50 h-12 w-12 text-m sm:h-18 sm:w-20 md:h-24 md:w-24 sm:text-xl md:text-2xl lg:text-3xl md:bg-white text-white md:text-black md:rounded-full focus:outline-none"
           @click.prevent="current_song === song ? toggleAudio : newSong(song)"
         >
           <i  @click.prevent="toggleAudio" :class="{'fas fa-play': !playing || current_song !== song, 'fas fa-pause': playing && current_song===song}"></i>
